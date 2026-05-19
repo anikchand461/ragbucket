@@ -1,0 +1,64 @@
+Anik Chand
+Kolkata, India |
+anikchand461@gmail.com
+| +91 9153772355 |
+anikchand.vercel.app
+|
+linkedin.com/in/anikchand461
+|
+github.com/anikchand461
+|
+kaggle.com/anikchand
+Summary
+Machine Learning Engineer specializing in NLP, LLM applications and model deployment., Experienced in building pro-duction ML pipelines, RAG systems and hyperparameter optimization libraries using python, fastAPI and TensorFlow.
+Experience
+Contributor – NumPy
+Oct 2025 | Remote
+• Finalized linalg/fft deprecations (PR #29909) to enhance type safety for ML workflows.
+• Improved numerical stability for scientific computing and generative models (e.g., GANs) via clean SVD/FFT implementations.
+Machine Learning Trainee – ISTE HIT Student Chapter
+Mar–Sep 2025 | Haldia
+• Executed ML pipelines for student projects, boosting model accuracy and applying skills to real-world cases.
+• Mentored at BitsNBytes 2025 (ISTE), guiding participants through technical challenges and advanced DSA problem-solving.
+Contributor (Hacktoberfest) – LocalStack
+Oct 2025 | Remote
+• Normalized documentation structure for “Reproducible ML with Cloud Pods” tutorial by adding Introduction and Testing sections (PR #268).
+• Enhanced developer onboarding by improving clarity and consistency in AWS emulation guides, reviewed and merged by core maintainers.
+Education
+Haldia Institute of Technology
+2024-Present
+B.Tech in Computer Science and Engineering, Expected Graduation: 2028 , CGPA : 8.59
+Birbhum Zilla School
+2020-2022
+Higher Secondary (Class 12), Grade: O (92.2%)
+Projects
+lazytune – Fast Hyperparameter Optimization for scikit-learn
+GitHub · Live Demo
+• Developed LazyTune, a smart hyperparameter optimization library (available on PyPI) that achieves speedup over GridSearchCV with near-identical final performance.
+• Implemented a multi-stage pipeline: quick screening with cross-validation, performance-based ranking, early pruning of poor configurations (prune_ratio), and full training on top candidates.
+• Tools: Python, scikit-learn, NumPy, pandas, FastAPI (backend), HTML/CSS/JavaScript (frontend), Vercel
+AkBOT – AI Portfolio Chatbot
+GitHub · Live Demo
+• Developed a RAG-based chatbot using FastAPI, FAISS, LangChain, and Gemini API, enabling intelligent LLM-driven, context-aware portfolio QA.
+• Deployed a responsive web app on Render, improving recruiter engagement with dynamic project queries.
+• Tools: FastAPI, LangChain, ChromaDB, Gemini API, HTML, CSS, JavaScript, Render
+Customer Sentiment Segmentation
+GitHub · Live Demo
+• Built an ensemble ML classifier with TF-IDF and SciPy sparse matrices, achieving 89.15% accuracy on large-scale reviews.
+• Segmented customer feedback into positive/negative/neutral classes, enabling data-driven business insights.
+• Tools: Python, scikit-learn, NumPy, SciPy
+Video-RAG-Search – YouTube Video RAG Platform
+GitHub
+• Developed a Flask-based web application for YouTube audio transcription using Whisper, keyword extraction with Groq LLM, and semantic embeddings via SentenceTransformers stored in MariaDB.
+• Implemented semantic similarity search for transcript snippets with ranking, interactive UI, and caching via Flask-Caching.
+• Tools: Flask, MariaDB, Whisper, SentenceTransformers, yt-dlp, Groq API
+Skills
+Languages: Python, Java, C++, SQL, JavaScript | Libraries & Tools: NumPy, Pandas, Matplotlib, Seaborn, Scipy, Scikit-learn, XGBoost, TensorFlow, Keras, PyTorch, OpenCV, Transformers, MLflow, Docker | AI/ML & Cloud Platforms: Hugging Face, LangChain, FastAPI, Streamlit, Gradio | Databases: MySQL, SQLite | Soft Skills: Teamwork, Leadership, Adaptability
+Certifications
+Intro to Machine Learning
+Kaggle | Jun 2025 |
+Credential
+Skills: Random Forest, Model Validation, Machine Learning
+Introduction to Model Context Protocol
+Anthropic | Mar 2026 |
+Credential
