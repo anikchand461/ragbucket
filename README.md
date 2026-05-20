@@ -1,497 +1,281 @@
-# RagBucket
-
 <div align="center">
 
-## Portable Executable RAG Artifacts for Python
+<img src="frontend/img/ragbucket.png" alt="RagBucket Logo" width="140" />
 
-Build Retrieval-Augmented Generation systems as reusable, shareable, and executable `.rag` artifacts.
+# RagBucket
 
-<p align="center">
-  <a href="https://pypi.org/project/ragbucket/">PyPI</a> •
-  <a href="#installation">Installation</a> •
-  <a href="#quickstart">Quickstart</a> •
-  <a href="#features">Features</a> •
-  <a href="#vision">Vision</a>
+### Portable Executable RAG Artifacts for Python
+
+**Build once. Load anywhere.**
+
+[![PyPI version](https://img.shields.io/pypi/v/ragbucket?style=for-the-badge&color=FFD700&labelColor=1a1a2e)](https://pypi.org/project/ragbucket/)
+[![Python](https://img.shields.io/pypi/pyversions/ragbucket?style=for-the-badge&color=4FC3F7&labelColor=1a1a2e)](https://pypi.org/project/ragbucket/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-A8FF78?style=for-the-badge&labelColor=1a1a2e)](LICENSE)
+[![Downloads](https://img.shields.io/pypi/dm/ragbucket?style=for-the-badge&color=FF6B9D&labelColor=1a1a2e)](https://pypi.org/project/ragbucket/)
+
+<p>
+  <a href="#-installation">Installation</a> •
+  <a href="#-quickstart">Quickstart</a> •
+  <a href="#-what-is-ragbucket">What is RagBucket?</a> •
+  <a href="#-multi-provider-runtime">Providers</a> •
+  <a href="#-roadmap">Roadmap</a>
 </p>
 
 </div>
 
 ---
 
-# What is RagBucket?
+## The Problem
 
-Traditional machine learning models are portable.
+Traditional ML models are portable by default:
 
-```text
-model.pt
-model.onnx
-model.gguf
-model.h5
+```
+model.pt   model.onnx   model.gguf   model.h5
 ```
 
-They can be:
+They can be saved, shared, and deployed anywhere. **RAG systems can't.**
 
-- saved
-- reused
-- shared
-- deployed anywhere
+A typical RAG pipeline is a fragile web of:
 
-But modern Retrieval-Augmented Generation (RAG) systems are still fragmented.
+- vector databases tied to infrastructure
+- embedding pipelines that must be re-run
+- chunking configs scattered across codebases
+- provider-specific integrations with no portability
+- metadata that lives nowhere and everywhere
 
-A typical RAG pipeline depends on:
-
-- vector databases
-- embedding pipelines
-- chunking systems
-- retrievers
-- metadata stores
-- external infrastructure
-- provider-specific integrations
-
-This makes RAG systems:
-
-- difficult to distribute
-- tightly coupled to infrastructure
-- hard to reproduce
-- non-portable
+**RagBucket solves this.** It packages your entire RAG pipeline — vectors, chunks, config, and runtime metadata — into a single portable `.rag` artifact.
 
 ---
 
-# Introducing `.rag`
+## Introducing `.rag`
 
-RagBucket introduces:
+<div align="center">
+<img src="frontend/img/main.png" alt="RagBucket Architecture" width="800" />
+</div>
 
-# `.rag`
+A `.rag` artifact is a **self-contained, executable unit of retrieval intelligence**. It packages:
 
-A portable executable artifact format for Retrieval-Augmented Generation systems.
+| What                    | How                         |
+| ----------------------- | --------------------------- |
+| Semantic embeddings     | via Sentence Transformers   |
+| Vector index            | via FAISS                   |
+| Chunked knowledge       | via LangChain splitters     |
+| Retrieval configuration | embedded in manifest        |
+| Runtime metadata        | versioned artifact manifest |
 
-A `.rag` artifact packages:
-
-- semantic embeddings
-- vector indexes
-- chunked knowledge
-- retrieval configuration
-- runtime metadata
-
-into a single reusable file.
-
-Build once. Load anywhere.
+**Build it once. Drop it anywhere. Query it with one line of code.**
 
 ---
 
-# Core Idea
+## Full Architecture
 
-```text
-Documents
-    ↓
-RagBuilder
-    ↓
-model.rag
-    ↓
-RagRuntime
-    ↓
-Question Answering
-```
-
-The builder converts raw documents into a portable retrieval artifact.
-
-The runtime loads the artifact and performs:
-
-- semantic retrieval
-- contextual augmentation
-- provider-based generation
-
-using external LLM providers like:
-
-- Groq
-- OpenAI
-- Gemini
-- Anthropic
+<div align="center">
+<img src="frontend/img/workflow.png" alt="RagBucket Full Workflow" width="900" />
+</div>
 
 ---
 
-# Installation
-
-## Using uv
+## ✦ Installation
 
 ```bash
+# Using uv (recommended)
 uv add ragbucket
-```
 
----
-
-## Using pip
-
-```bash
+# Using pip
 pip install ragbucket
 ```
 
 ---
 
-# Quickstart
+## ⚡ Quickstart
 
-# Step 1 — Build a `.rag` Artifact
+### Step 1 — Build a `.rag` Artifact
 
 ```python
-from ragbucket import RagBuilder
-from ragbucket import RagConfig
-
+from ragbucket import RagBuilder, RagConfig
 
 config = RagConfig(
-
     embedding_model="BAAI/bge-small-en-v1.5",
-
     chunk_size=512,
-
     chunk_overlap=50,
-
     top_k=3
 )
 
-
-builder = RagBuilder(
-    config=config
-)
-
+builder = RagBuilder(config=config)
 
 builder.build(
-    doc_path="docs",
+    doc_path="docs/",
     op_path="artifacts/demo.rag"
 )
 ```
 
-This generates:
+This generates a single portable file:
 
-```text
+```
 artifacts/demo.rag
 ```
 
+That's it. Your entire retrieval system — vectors, chunks, config — is now in one file.
+
 ---
 
-# Step 2 — Load and Use the Artifact
+### Step 2 — Load and Query Anywhere
 
 ```python
 from ragbucket import RagRuntime
-
 import os
-
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
-
-system_prompt = """
-you are Anik's personal chatbot.
-
-keep answers short and crisp.
-"""
-
-
 rag = RagRuntime(
-
     rag_path="artifacts/demo.rag",
-
     provider="groq",
-
     api_key=os.getenv("GROQ_API_KEY"),
-
     model="llama-3.1-8b-instant",
-
-    system_prompt=system_prompt
+    system_prompt="You are a helpful assistant. Keep answers short and crisp."
 )
 
-
-response = rag.ask(
-    "What are Anik's AIML skills?"
-)
-
+response = rag.ask("What are Anik's AI/ML skills?")
 print(response)
 ```
 
 ---
 
-# Multi-Provider Runtime
+## 🔌 Multi-Provider Runtime
 
-RagBucket supports multiple LLM providers through a unified runtime abstraction.
+RagBucket ships with a unified provider abstraction. Swap LLMs without touching your retrieval logic.
 
----
-
-## Groq
-
-```python
-provider="groq"
-model="llama-3.1-8b-instant"
-```
-
----
-
-## OpenAI
+| Provider    | Example Model             |
+| ----------- | ------------------------- |
+| `groq`      | `llama-3.1-8b-instant`    |
+| `openai`    | `gpt-4o-mini`             |
+| `gemini`    | `gemini-1.5-flash`        |
+| `anthropic` | `claude-3-haiku-20240307` |
 
 ```python
-provider="openai"
-model="gpt-4o-mini"
+# Groq
+rag = RagRuntime(rag_path="demo.rag", provider="groq", model="llama-3.1-8b-instant", ...)
+
+# OpenAI
+rag = RagRuntime(rag_path="demo.rag", provider="openai", model="gpt-4o-mini", ...)
+
+# Gemini
+rag = RagRuntime(rag_path="demo.rag", provider="gemini", model="gemini-1.5-flash", ...)
+
+# Anthropic
+rag = RagRuntime(rag_path="demo.rag", provider="anthropic", model="claude-3-haiku-20240307", ...)
 ```
 
 ---
 
-## Gemini
+## ⚙️ Dynamic Configuration
 
-```python
-provider="gemini"
-model="gemini-1.5-flash"
-```
-
----
-
-## Anthropic
-
-```python
-provider="anthropic"
-model="claude-3-haiku-20240307"
-```
-
----
-
-# Runtime Pipeline
-
-```text
-User Query
-    ↓
-Query Embedding
-    ↓
-Semantic Vector Search
-    ↓
-Relevant Context Retrieval
-    ↓
-LLM Provider
-    ↓
-Generated Response
-```
-
----
-
-# Dynamic Configuration System
-
-RagBucket supports configurable retrieval pipelines using `RagConfig`.
-
-You can customize:
-
-- embedding model
-- chunk size
-- chunk overlap
-- retrieval top-k
-
-Example:
+Customize every stage of the retrieval pipeline with `RagConfig`:
 
 ```python
 from ragbucket import RagConfig
 
-
 config = RagConfig(
-
     embedding_model="sentence-transformers/all-MiniLM-L6-v2",
-
     chunk_size=1024,
-
     chunk_overlap=100,
-
     top_k=5
 )
 ```
 
-Any missing configuration values are automatically filled using framework defaults.
+Missing values are automatically filled with sensible defaults.
 
----
+### Supported Embedding Models
 
-# Supported Embedding Models
-
-RagBucket works with any compatible Sentence Transformers model.
-
-Examples:
+Any [Sentence Transformers](https://www.sbert.net/docs/pretrained_models.html) compatible model works:
 
 ```python
-"BAAI/bge-small-en-v1.5"
-```
-
-```python
-"sentence-transformers/all-MiniLM-L6-v2"
-```
-
-```python
-"sentence-transformers/all-mpnet-base-v2"
-```
-
-```python
-"BAAI/bge-base-en-v1.5"
+"BAAI/bge-small-en-v1.5"           # Fast, great for English
+"BAAI/bge-base-en-v1.5"            # Balanced quality/speed
+"sentence-transformers/all-MiniLM-L6-v2"   # Lightweight default
+"sentence-transformers/all-mpnet-base-v2"  # Higher accuracy
 ```
 
 ---
 
-# What a `.rag` File Contains
+## 📦 What's Inside a `.rag` File
 
-A `.rag` artifact stores:
+A `.rag` is a compressed ZIP archive containing exactly three files:
 
-- semantic embeddings
-- FAISS vector index
-- chunked document memory
-- retrieval metadata
-- runtime configuration
-- artifact manifest
+```
+demo.rag
+├── vectors.faiss     ← FAISS vector index (searchable semantic memory)
+├── chunks.json       ← Chunked document text
+└── manifest.json     ← Config, versioning, and runtime metadata
+```
 
-The only requirement during inference is:
-
-- an LLM provider API key
+At inference time, the **only external dependency** is an LLM provider API key.
 
 ---
 
-# Features
+## 🏗️ Project Structure
 
-## Portable RAG Artifacts
-
-Serialize retrieval systems into reusable `.rag` files.
-
----
-
-## Built-in Semantic Search
-
-Uses FAISS for efficient vector similarity retrieval.
-
----
-
-## Multi-Provider Runtime
-
-Unified runtime interface for:
-
-- Groq
-- OpenAI
-- Gemini
-- Anthropic
-
----
-
-## Configurable Retrieval Pipeline
-
-Customize chunking and embedding behavior using `RagConfig`.
+```
+ragbucket/
+├── builder/
+│   ├── builder.py      ← RagBuilder orchestrator
+│   ├── chunker.py      ← LangChain recursive splitter
+│   ├── embedder.py     ← Sentence Transformers encoder
+│   ├── indexer.py      ← FAISS index builder
+│   └── packager.py     ← .rag artifact packaging
+├── runtime/
+│   ├── runtime.py      ← RagRuntime orchestrator
+│   ├── loader.py       ← .rag artifact loader
+│   ├── retriever.py    ← Semantic vector retrieval
+│   ├── models.py       ← Cached embedding model singleton
+│   └── providers/      ← Groq / OpenAI / Gemini / Anthropic
+├── schemas/
+│   ├── config.py       ← RagConfig Pydantic model
+│   └── manifest.py     ← Artifact manifest schema
+└── utils/
+    ├── file_utils.py   ← Document loading helpers
+    └── hashing.py      ← Artifact integrity utilities
+```
 
 ---
 
-## Lightweight Runtime
+## 🧰 Technology Stack
 
-Load and execute `.rag` artifacts anywhere using Python.
-
----
-
-## Self-Contained Retrieval Memory
-
-The artifact itself contains the retrieval system.
-
----
-
-## Simple Developer API
-
-Minimal abstractions for building and querying portable RAG systems.
+| Component          | Technology               |
+| ------------------ | ------------------------ |
+| Embeddings         | Sentence Transformers    |
+| Vector Search      | FAISS                    |
+| Chunking           | LangChain Text Splitters |
+| Artifact Packaging | Python `zipfile`         |
+| Config Validation  | Pydantic                 |
+| Runtime            | Pure Python              |
 
 ---
 
-## Extensible Architecture
+## ✦ Philosophy
 
-Designed for future support of:
+RagBucket treats RAG systems as **portable intelligence artifacts** — not fragile infrastructure pipelines.
 
-- reranking
-- metadata filtering
-- hybrid retrieval
-- distributed vector stores
-- remote artifact registries
+This cleanly separates:
 
----
+- **Retrieval memory** (what you built) → lives in the `.rag` file
+- **Language generation** (how you query it) → any provider, any environment
 
-# Technology Stack
-
-| Component       | Technology            |
-| --------------- | --------------------- |
-| Embeddings      | Sentence Transformers |
-| Vector Search   | FAISS                 |
-| Chunking        | LangChain             |
-| Runtime         | Python                |
-| Packaging       | zipfile               |
-| Artifact Format | `.rag`                |
+The result: reusable semantic memory that travels with your code.
 
 ---
 
-# Philosophy
+## 📄 License
 
-RagBucket treats RAG systems as:
-
-# portable intelligence artifacts
-
-instead of:
-
-# fragmented retrieval pipelines
-
-This separates:
-
-- retrieval memory
-  from
-- language generation
-
-allowing:
-
-- reusable semantic memory
-- infrastructure-independent retrieval
-- portable execution
-- simplified deployment
+MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-# Current Scope
+<div align="center">
 
-RagBucket currently supports:
+**RagBucket** · Built by [Anik Chand](https://github.com/anikchand461)
 
-- local `.rag` artifact generation
-- semantic retrieval
-- configurable chunking
-- multi-provider inference
-- FAISS vector indexing
-- provider-based generation
+_The portable runtime layer for Retrieval-Augmented Generation systems._
 
-The project is intentionally lightweight and focused on:
-
-# portable RAG execution
-
----
-
-# Future Roadmap
-
-Planned features:
-
-- hybrid retrieval
-- metadata-aware search
-- reranking support
-- artifact versioning
-- remote artifact loading
-- distributed vector stores
-- multi-vector retrieval
-- `.rag` registries
-
----
-
-# Vision
-
-RagBucket aims to become:
-
-> "The portable runtime layer for Retrieval-Augmented Generation systems."
-
-A future where RAG systems can be:
-
-- built once
-- shared anywhere
-- executed everywhere
-
-through standardized portable intelligence artifacts.
-
----
-
-# License
-
-MIT License
+</div>
