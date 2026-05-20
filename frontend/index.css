@@ -83,11 +83,31 @@ body::after {
 }
 
 .nav-logo {
-  display: flex; align-items: center; gap: 9px;
-  font-size: 15px; font-weight: 600; letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
   color: var(--text);
 }
-.nav-logo img { width: 26px; height: 26px; object-fit: contain; }
+
+.nav-logo img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  display: flex;
+  gap: 0;
+}
+
+.logo-text span:last-child {
+  color: var(--gold);
+}
 .nav-logo span { color: var(--gold); }
 
 .nav-links {
