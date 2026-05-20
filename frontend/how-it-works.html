@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAGBucket • How it works</title><link rel="stylesheet" href="styles.css"></head><body>
+<canvas id="bg"></canvas><div class="grid-overlay"></div>
+<nav><a class="brand" href="index.html">RAGBucket</a><div class="links"><a href="index.html">Home</a><a href="how-it-works.html">How it works</a><a href="playground.html">Playground</a></div></nav>
+<main>
+<section class="hero"><h1>What is this actually doing?</h1><p class="lead">This pipeline transforms raw files into searchable memory, then retrieves the most relevant chunks for LLM generation.</p></section>
+<h2 class="section-title">Pipeline animation</h2>
+<div class="flow"><div class="flow-steps"><div class="step">Documents</div><div class="arrow">→</div><div class="step">Chunker</div><div class="arrow">→</div><div class="step">Embeddings</div><div class="arrow">→</div><div class="step">FAISS Index</div><div class="arrow">→</div><div class="step">.rag Artifact</div><div class="arrow">→</div><div class="step">RagRuntime</div><div class="arrow">→</div><div class="step">LLM Response</div></div></div>
+<div class="cards"><article class="card"><h3>Build phase</h3><p>Input docs are chunked and embedded, then packed with index + manifest.</p></article><article class="card"><h3>Runtime phase</h3><p>User query is embedded, nearest chunks are fetched, then answer is generated with grounded context.</p></article></div>
+<footer>Separate build/runtime gives portability and predictable behavior.</footer>
+</main><script src="app.js"></script></body></html>
