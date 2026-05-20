@@ -1,2 +1,2 @@
 # pypi package version 
-ARTIFACT_VERSION = "0.2.5"
+ARTIFACT_VERSION = "0.2.6"

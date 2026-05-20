@@ -4,8 +4,6 @@
 
 <img src="frontend/img/ragbucket.png" alt="RagBucket Logo" width="160" />
 
-<br/>
-
 # RagBucket
 
 <h3><em>Portable Executable RAG Artifacts for Python</em></h3>
