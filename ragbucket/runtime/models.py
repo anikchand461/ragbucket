@@ -1,9 +1,17 @@
 from sentence_transformers import SentenceTransformer
 
-from ragbucket.constants import EMBEDDING_MODEL
+
+_embedding_model = None
 
 
-# Global cached embedding model
-embedding_model = SentenceTransformer(
-    EMBEDDING_MODEL
-)
+def get_embedding_model(model_name: str):
+
+    global _embedding_model
+
+    if _embedding_model is None:
+
+        _embedding_model = SentenceTransformer(
+            model_name
+        )
+
+    return _embedding_model

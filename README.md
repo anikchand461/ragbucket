@@ -2,7 +2,7 @@
 
 <div align="center">
 
-### Portable Executable RAG Artifacts for Python
+## Portable Executable RAG Artifacts for Python
 
 Build Retrieval-Augmented Generation systems as reusable, shareable, and executable `.rag` artifacts.
 
@@ -10,14 +10,15 @@ Build Retrieval-Augmented Generation systems as reusable, shareable, and executa
   <a href="https://pypi.org/project/ragbucket/">PyPI</a> •
   <a href="#installation">Installation</a> •
   <a href="#quickstart">Quickstart</a> •
-  <a href="#core-idea">Core Idea</a>
+  <a href="#features">Features</a> •
+  <a href="#vision">Vision</a>
 </p>
 
 </div>
 
 ---
 
-# Why RagBucket?
+# What is RagBucket?
 
 Traditional machine learning models are portable.
 
@@ -25,18 +26,19 @@ Traditional machine learning models are portable.
 model.pt
 model.onnx
 model.gguf
+model.h5
 ```
 
 They can be:
 
 - saved
+- reused
 - shared
-- deployed
-- reused anywhere
+- deployed anywhere
 
-But Retrieval-Augmented Generation (RAG) systems are still fragmented.
+But modern Retrieval-Augmented Generation (RAG) systems are still fragmented.
 
-A modern RAG pipeline usually depends on:
+A typical RAG pipeline depends on:
 
 - vector databases
 - embedding pipelines
@@ -44,6 +46,7 @@ A modern RAG pipeline usually depends on:
 - retrievers
 - metadata stores
 - external infrastructure
+- provider-specific integrations
 
 This makes RAG systems:
 
@@ -62,16 +65,17 @@ RagBucket introduces:
 
 A portable executable artifact format for Retrieval-Augmented Generation systems.
 
-The `.rag` artifact packages:
+A `.rag` artifact packages:
 
-- vector memory
 - semantic embeddings
+- vector indexes
 - chunked knowledge
-- retrieval metadata
-- FAISS indexes
-- runtime configuration
+- retrieval configuration
+- runtime metadata
 
 into a single reusable file.
+
+Build once. Load anywhere.
 
 ---
 
@@ -89,15 +93,20 @@ RagRuntime
 Question Answering
 ```
 
-The builder converts knowledge into a portable retrieval artifact.
+The builder converts raw documents into a portable retrieval artifact.
 
 The runtime loads the artifact and performs:
 
 - semantic retrieval
 - contextual augmentation
-- LLM-powered generation
+- provider-based generation
 
-using an external model provider like Groq.
+using external LLM providers like:
+
+- Groq
+- OpenAI
+- Gemini
+- Anthropic
 
 ---
 
@@ -121,12 +130,29 @@ pip install ragbucket
 
 # Quickstart
 
-## Step 1 — Build a `.rag` Artifact
+# Step 1 — Build a `.rag` Artifact
 
 ```python
 from ragbucket import RagBuilder
+from ragbucket import RagConfig
 
-builder = RagBuilder()
+
+config = RagConfig(
+
+    embedding_model="BAAI/bge-small-en-v1.5",
+
+    chunk_size=512,
+
+    chunk_overlap=50,
+
+    top_k=3
+)
+
+
+builder = RagBuilder(
+    config=config
+)
+
 
 builder.build(
     doc_path="docs",
@@ -142,30 +168,42 @@ artifacts/demo.rag
 
 ---
 
-## Step 2 — Load and Use the Artifact
+# Step 2 — Load and Use the Artifact
 
 ```python
 from ragbucket import RagRuntime
 
+import os
+
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+
 system_prompt = """
 you are Anik's personal chatbot.
-you know all things about anik.
 
-If anyone asks about the resume of anik
-please share the details as required.
-
-keep the answers super simple and crisp.
+keep answers short and crisp.
 """
 
+
 rag = RagRuntime(
+
     rag_path="artifacts/demo.rag",
-    api_key="your_groq_api_key",
+
+    provider="groq",
+
+    api_key=os.getenv("GROQ_API_KEY"),
+
     model="llama-3.1-8b-instant",
+
     system_prompt=system_prompt
 )
 
+
 response = rag.ask(
-    "Can you tell me Anik's skills related to AIML?"
+    "What are Anik's AIML skills?"
 )
 
 print(response)
@@ -173,34 +211,45 @@ print(response)
 
 ---
 
-# Example Output
+# Multi-Provider Runtime
 
-```text
-Anik's AI/ML skills include:
-- Hugging Face
-- LangChain
-- Streamlit
-- FastAPI
-- Deep Learning
-- Transformers
+RagBucket supports multiple LLM providers through a unified runtime abstraction.
+
+---
+
+## Groq
+
+```python
+provider="groq"
+model="llama-3.1-8b-instant"
 ```
 
 ---
 
-# What a `.rag` File Contains
+## OpenAI
 
-A `.rag` artifact stores everything required for retrieval:
+```python
+provider="openai"
+model="gpt-4o-mini"
+```
 
-- semantic embeddings
-- FAISS vector index
-- chunked document memory
-- retrieval metadata
-- artifact manifest
-- runtime configuration
+---
 
-The only thing required during inference is:
+## Gemini
 
-- an LLM provider API key
+```python
+provider="gemini"
+model="gemini-1.5-flash"
+```
+
+---
+
+## Anthropic
+
+```python
+provider="anthropic"
+model="claude-3-haiku-20240307"
+```
 
 ---
 
@@ -215,10 +264,84 @@ Semantic Vector Search
     ↓
 Relevant Context Retrieval
     ↓
-LLM Generation
+LLM Provider
     ↓
-Final Response
+Generated Response
 ```
+
+---
+
+# Dynamic Configuration System
+
+RagBucket supports configurable retrieval pipelines using `RagConfig`.
+
+You can customize:
+
+- embedding model
+- chunk size
+- chunk overlap
+- retrieval top-k
+
+Example:
+
+```python
+from ragbucket import RagConfig
+
+
+config = RagConfig(
+
+    embedding_model="sentence-transformers/all-MiniLM-L6-v2",
+
+    chunk_size=1024,
+
+    chunk_overlap=100,
+
+    top_k=5
+)
+```
+
+Any missing configuration values are automatically filled using framework defaults.
+
+---
+
+# Supported Embedding Models
+
+RagBucket works with any compatible Sentence Transformers model.
+
+Examples:
+
+```python
+"BAAI/bge-small-en-v1.5"
+```
+
+```python
+"sentence-transformers/all-MiniLM-L6-v2"
+```
+
+```python
+"sentence-transformers/all-mpnet-base-v2"
+```
+
+```python
+"BAAI/bge-base-en-v1.5"
+```
+
+---
+
+# What a `.rag` File Contains
+
+A `.rag` artifact stores:
+
+- semantic embeddings
+- FAISS vector index
+- chunked document memory
+- retrieval metadata
+- runtime configuration
+- artifact manifest
+
+The only requirement during inference is:
+
+- an LLM provider API key
 
 ---
 
@@ -236,9 +359,20 @@ Uses FAISS for efficient vector similarity retrieval.
 
 ---
 
-## Groq-Powered Generation
+## Multi-Provider Runtime
 
-Use Groq-hosted LLMs for fast inference.
+Unified runtime interface for:
+
+- Groq
+- OpenAI
+- Gemini
+- Anthropic
+
+---
+
+## Configurable Retrieval Pipeline
+
+Customize chunking and embedding behavior using `RagConfig`.
 
 ---
 
@@ -256,19 +390,19 @@ The artifact itself contains the retrieval system.
 
 ## Simple Developer API
 
-Minimal abstraction for building and querying RAG artifacts.
+Minimal abstractions for building and querying portable RAG systems.
 
 ---
 
-## Extensible Design
+## Extensible Architecture
 
 Designed for future support of:
 
-- hybrid retrieval
-- metadata filtering
 - reranking
+- metadata filtering
+- hybrid retrieval
 - distributed vector stores
-- multi-model runtimes
+- remote artifact registries
 
 ---
 
@@ -280,7 +414,6 @@ Designed for future support of:
 | Vector Search   | FAISS                 |
 | Chunking        | LangChain             |
 | Runtime         | Python                |
-| Generation      | Groq                  |
 | Packaging       | zipfile               |
 | Artifact Format | `.rag`                |
 
@@ -298,16 +431,16 @@ instead of:
 
 This separates:
 
-- knowledge retrieval
+- retrieval memory
   from
 - language generation
 
 allowing:
 
 - reusable semantic memory
-- portable RAG execution
+- infrastructure-independent retrieval
+- portable execution
 - simplified deployment
-- infrastructure-independent retrieval systems
 
 ---
 
@@ -316,9 +449,11 @@ allowing:
 RagBucket currently supports:
 
 - local `.rag` artifact generation
-- FAISS vector indexing
 - semantic retrieval
-- Groq-powered response generation
+- configurable chunking
+- multi-provider inference
+- FAISS vector indexing
+- provider-based generation
 
 The project is intentionally lightweight and focused on:
 
@@ -328,15 +463,15 @@ The project is intentionally lightweight and focused on:
 
 # Future Roadmap
 
-Planned features include:
+Planned features:
 
 - hybrid retrieval
 - metadata-aware search
-- artifact versioning
 - reranking support
-- Milvus integration
-- multi-provider LLM runtime
-- distributed retrieval
+- artifact versioning
+- remote artifact loading
+- distributed vector stores
+- multi-vector retrieval
 - `.rag` registries
 
 ---
@@ -345,7 +480,7 @@ Planned features include:
 
 RagBucket aims to become:
 
-> “The portable runtime layer for Retrieval-Augmented Generation systems.”
+> "The portable runtime layer for Retrieval-Augmented Generation systems."
 
 A future where RAG systems can be:
 

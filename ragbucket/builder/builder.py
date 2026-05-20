@@ -6,15 +6,20 @@ from ragbucket.builder.indexer import Indexer
 from ragbucket.builder.embedder import Embedder
 from ragbucket.builder.packager import Packager
 
-from ragbucket.constants import ARTIFACT_VERSION, CHUNK_SIZE, EMBEDDING_MODEL
+from ragbucket.constants import ARTIFACT_VERSION
 from ragbucket.utils.file_utils import get_text_files
+from ragbucket.schemas.config import RagConfig
 
 class RagBuilder:
 
-    def __init__(self):
+    def __init__(self, config: RagConfig | None = None):
 
-        self.chunker = Chunker()
-        self.embedder = Embedder()
+        if config is None:
+            config = RagConfig()
+
+        self.config = config
+        self.chunker = Chunker(config)
+        self.embedder = Embedder(config)
         self.indexer = Indexer()
         self.packager = Packager()
 
@@ -42,10 +47,14 @@ class RagBuilder:
 
         manifest = {
             "artifact_version" : ARTIFACT_VERSION,
-            "embedding_model" : EMBEDDING_MODEL,
-            "chunk_size" : CHUNK_SIZE,
             "vector_store" : "faiss",
-            "created_by" : "ragbucket"
+            "created_by" : "ragbucket",
+            "config" : {
+                "embedding_model" : self.config.embedding_model,
+                "chunk_size" : self.config.chunk_size,
+                "chunk_overlap" : self.config.chunk_overlap,
+                "top_k" : self.config.top_k
+            }
         }
 
         self.packager.package(

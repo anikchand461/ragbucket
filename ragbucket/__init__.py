@@ -4,6 +4,7 @@
 # ragbucket/builder/builder.py
 from ragbucket.builder.builder import RagBuilder
 from ragbucket.runtime.runtime import RagRuntime
+from ragbucket.schemas.config import RagConfig
 
 # Expose RagBuilder as part of the public API.
 #
@@ -14,6 +15,7 @@ from ragbucket.runtime.runtime import RagRuntime
 # from ragbucket.builder.builder import RagBuilder
 __all__ = [
     "RagBuilder",
-    "RagRuntime"
+    "RagRuntime",
+    "RagConfig"
 ]
 

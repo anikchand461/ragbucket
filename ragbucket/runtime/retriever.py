@@ -7,7 +7,7 @@ import numpy as np
 
 
 # Import the globally cached embedding model.
-from ragbucket.runtime.models import embedding_model
+from ragbucket.runtime.models import get_embedding_model
 
 
 # Retriever class responsible for:
@@ -16,6 +16,10 @@ from ragbucket.runtime.models import embedding_model
 # - retrieving relevant chunks
 class Retriever:
 
+    def __init__(self, config: dict):
+        self.config = config
+        self.model = get_embedding_model(config["embedding_model"])
+
     # Retrieve the most relevant chunks
     # for a given user query.
     def retrieve(
@@ -23,12 +27,15 @@ class Retriever:
         query: str,
         index,
         chunks,
-        top_k: int = 3
+        top_k = None
     ):
+
+        if top_k is None:
+            top_k = self.config["top_k"]
 
         # Convert the user query into
         # a semantic vector embedding.
-        query_embedding = embedding_model.encode(
+        query_embedding = self.model.encode(
             [query]
         )
 

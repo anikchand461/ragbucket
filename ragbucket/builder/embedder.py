@@ -5,23 +5,24 @@
 # Import the SentenceTransformer wrapper
 # used for generating semantic embeddings.
 from sentence_transformers import SentenceTransformer
+from ragbucket.runtime.models import get_embedding_model
 
 
 # Import the embedding model configuration
 # from the global constants file.
-from ragbucket.constants import EMBEDDING_MODEL
+# from ragbucket.constants import EMBEDDING_MODEL
 
 
 # Embedder class responsible for converting
 # text chunks into semantic vector embeddings.
 class Embedder:
 
-    def __init__(self):
+    def __init__(self, config):
 
         # Load the embedding model specified
         # in constants.py
-        self.model = SentenceTransformer(
-            EMBEDDING_MODEL
+        self.model = get_embedding_model(
+            config.embedding_model
         )
 
     # Generate embeddings for the given chunks.
