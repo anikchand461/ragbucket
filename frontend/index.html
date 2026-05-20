@@ -1,9 +1,649 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAGBucket • Home</title><link rel="stylesheet" href="styles.css"></head><body>
-<canvas id="bg"></canvas><div class="grid-overlay"></div>
-<nav><a class="brand" href="index.html">RAGBucket</a><div class="links"><a href="index.html">Home</a><a href="how-it-works.html">How it works</a><a href="playground.html">Playground</a></div></nav>
-<main>
-<section class="hero"><img src="img/ragbucket.png" alt="RAGBucket logo" style="width:120px;filter:drop-shadow(0 0 25px rgba(255,232,106,.45));animation:float 4s ease-in-out infinite"><h1>Build once. Query anywhere.</h1><p class="lead">RAGBucket turns your documents into portable <strong>.rag</strong> artifacts that carry chunks, vectors, metadata, and runtime retrieval settings in one deployable package.</p><div class="btns"><a class="btn primary" href="https://github.com/anikchand461/ragbucket" target="_blank">GitHub</a><a class="btn" href="playground.html">Try Interactive Demo</a></div></section>
-<h2 class="section-title">Why this is useful</h2>
-<div class="cards"><article class="card"><h3>Portable artifacts</h3><p>Bundle retrieval memory and configuration into one object you can move across machines and environments.</p></article><article class="card"><h3>Provider-agnostic</h3><p>Swap embedding and LLM providers without redesigning your entire RAG stack.</p></article><article class="card"><h3>Fast startup</h3><p>Load prebuilt index + metadata quickly, so apps can answer with context immediately.</p></article></div>
-<footer>Built for clean, reusable retrieval workflows.</footer>
-</main><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>RagBucket — Portable RAG Artifacts for Python</title>
+        <meta
+            name="description"
+            content="Build RAG pipelines as reusable, portable .rag artifacts. Build once. Load anywhere."
+        />
+        <link rel="icon" href="img/ragbucket.png" type="image/png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="index.css" />
+    </head>
+    <body>
+        <!-- NAV -->
+        <nav class="nav">
+            <a href="#hero" class="nav-logo">
+                <img src="img/ragbucket.png" alt="RagBucket logo" />
+                Rag<span>Bucket</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#artifact">Format</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#code">Quickstart</a></li>
+                <li><a href="#providers">Providers</a></li>
+                <li><a href="#features">Features</a></li>
+            </ul>
+            <div class="nav-end">
+                <a
+                    href="https://github.com/anikchand461/ragbucket"
+                    target="_blank"
+                    class="btn btn-ghost"
+                    >GitHub</a
+                >
+                <a
+                    href="https://pypi.org/project/ragbucket/"
+                    target="_blank"
+                    class="btn btn-gold"
+                    >PyPI →</a
+                >
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <section id="hero">
+            <div class="hero-glow"></div>
+            <div class="hero-inner">
+                <img
+                    src="img/ragbucket.png"
+                    alt="RagBucket"
+                    class="hero-logo"
+                />
+
+                <h1 class="hero-title">
+                    Rag<span class="accent">Bucket</span>
+                </h1>
+
+                <p class="hero-desc">
+                    Portable executable
+                    <strong style="color: var(--text); font-weight: 600"
+                        >.rag</strong
+                    >
+                    artifacts for Python. Package your entire RAG pipeline into
+                    a single file. Build once. Load anywhere.
+                </p>
+
+                <div class="hero-actions">
+                    <a
+                        href="https://pypi.org/project/ragbucket/"
+                        target="_blank"
+                        class="btn btn-gold"
+                        style="font-size: 15px; padding: 10px 22px"
+                    >
+                        Get on PyPI →
+                    </a>
+                    <a
+                        href="https://github.com/anikchand461/ragbucket"
+                        target="_blank"
+                        class="btn btn-ghost"
+                        style="font-size: 15px; padding: 10px 22px"
+                    >
+                        View on GitHub
+                    </a>
+                    <a
+                        href="#code"
+                        class="btn btn-ghost"
+                        style="font-size: 15px; padding: 10px 22px"
+                    >
+                        Quickstart
+                    </a>
+                </div>
+
+                <div class="hero-install">
+                    <span class="prompt">$</span>
+                    <span id="typing-text">uv add ragbucket</span>
+                    <button class="copy-btn" onclick="copyInstall(this)">
+                        Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-scroll">
+                <div class="scroll-line"></div>
+                <span>scroll</span>
+            </div>
+        </section>
+
+        <!-- PROBLEM -->
+        <section id="problem">
+            <div class="container">
+                <span class="eyebrow" data-reveal>The Problem</span>
+                <h2 class="section-title" data-reveal>
+                    RAG systems are still fragmented.
+                </h2>
+                <p class="section-lead" data-reveal>
+                    ML models travel as single files —
+                    <code
+                        style="
+                            font-family: var(--mono);
+                            font-size: 13px;
+                            color: var(--text-2);
+                        "
+                        >.pt .onnx .gguf .h5</code
+                    >
+                    — saved, shared, deployed anywhere. RAG pipelines don't.
+                    They're a web of infrastructure, scattered config, and
+                    provider lock-in.
+                </p>
+
+                <div class="compare-grid">
+                    <div class="compare-card bad" data-reveal data-delay="1">
+                        <div class="compare-head">
+                            <span class="compare-tag">Before RagBucket</span>
+                            <span class="compare-head-title"
+                                >Fragmented Pipeline</span
+                            >
+                        </div>
+                        <div class="compare-body">
+                            <div class="compare-item">
+                                <span class="compare-icon">✕</span>Vector DB
+                                tied to your infrastructure
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✕</span>Embedding
+                                pipeline re-runs every deploy
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✕</span>Chunking
+                                config scattered across repos
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✕</span>Provider
+                                lock-in at every layer
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✕</span
+                                >Non-reproducible retrieval results
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✕</span>Impossible to
+                                share or distribute
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="compare-card good" data-reveal data-delay="2">
+                        <div class="compare-head">
+                            <span class="compare-tag">With RagBucket</span>
+                            <span class="compare-head-title"
+                                >Portable .rag Artifact</span
+                            >
+                        </div>
+                        <div class="compare-body">
+                            <div class="compare-item">
+                                <span class="compare-icon">✓</span>Everything in
+                                one self-contained file
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✓</span>Build once,
+                                deploy anywhere
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✓</span>Config baked
+                                into the artifact
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✓</span>Swap LLM
+                                providers at runtime
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✓</span>100%
+                                reproducible retrieval
+                            </div>
+                            <div class="compare-item">
+                                <span class="compare-icon">✓</span>Share via
+                                pip, S3, or git
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ARTIFACT FORMAT -->
+        <section id="artifact">
+            <div class="container">
+                <div class="artifact-layout">
+                    <div data-reveal>
+                        <div class="rag-visual">
+                            <div class="rag-visual-top">
+                                <div class="dot dot-r"></div>
+                                <div class="dot dot-y"></div>
+                                <div class="dot dot-g"></div>
+                                <span class="rag-filename"
+                                    >demo<b>.rag</b></span
+                                >
+                            </div>
+                            <div class="rag-tree">
+                                <div class="rag-root">📦 demo.rag</div>
+                                <div
+                                    class="rag-item"
+                                    style="animation-delay: 0.08s"
+                                >
+                                    <span>🗄️</span>
+                                    <span class="rag-item-label"
+                                        >vectors.faiss</span
+                                    >
+                                    <span class="rag-item-desc"
+                                        >FAISS index</span
+                                    >
+                                </div>
+                                <div
+                                    class="rag-item"
+                                    style="animation-delay: 0.16s"
+                                >
+                                    <span>📄</span>
+                                    <span class="rag-item-label"
+                                        >chunks.json</span
+                                    >
+                                    <span class="rag-item-desc"
+                                        >document memory</span
+                                    >
+                                </div>
+                                <div
+                                    class="rag-item"
+                                    style="animation-delay: 0.24s"
+                                >
+                                    <span>⚙️</span>
+                                    <span class="rag-item-label"
+                                        >manifest.json</span
+                                    >
+                                    <span class="rag-item-desc"
+                                        >config + metadata</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="eyebrow" data-reveal>The Format</span>
+                        <h2 class="section-title" data-reveal>
+                            Introducing
+                            <span style="color: var(--gold)">.rag</span>
+                        </h2>
+                        <p class="section-lead" data-reveal>
+                            A compressed, self-contained archive that packages
+                            your entire retrieval system. Vectors, chunks, and
+                            config — everything in one file. The only external
+                            dependency at inference time is an LLM API key.
+                        </p>
+
+                        <div class="stats" data-reveal style="margin-top: 2rem">
+                            <div class="stat">
+                                <div class="stat-val">3</div>
+                                <div class="stat-lbl">files inside</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-val">4</div>
+                                <div class="stat-lbl">LLM providers</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-val">∞</div>
+                                <div class="stat-lbl">embedding models</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ARCHITECTURE -->
+        <section id="architecture">
+            <div class="container">
+                <span class="eyebrow" data-reveal>Architecture</span>
+                <h2 class="section-title" data-reveal>How it works</h2>
+                <p class="section-lead" data-reveal>
+                    Two completely decoupled phases: build-time artifact
+                    generation and runtime retrieval + generation. The artifact
+                    is the bridge.
+                </p>
+                <div class="arch-wrap" data-reveal>
+                    <img
+                        src="img/workflow.png"
+                        alt="RagBucket architecture diagram — build pipeline and runtime flow"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <!-- CODE QUICKSTART -->
+        <section id="code">
+            <div class="container">
+                <span class="eyebrow" data-reveal>Quickstart</span>
+                <h2 class="section-title" data-reveal>
+                    Two steps.<br />That's the whole API.
+                </h2>
+                <p class="section-lead" data-reveal>
+                    Build your artifact from documents. Load and query it
+                    anywhere — with any LLM provider.
+                </p>
+
+                <div class="tab-bar" data-reveal>
+                    <button
+                        class="tab-btn active"
+                        onclick="switchTab(this, 'build')"
+                    >
+                        01 · Build
+                    </button>
+                    <button
+                        class="tab-btn"
+                        onclick="switchTab(this, 'runtime')"
+                    >
+                        02 · Runtime
+                    </button>
+                    <button class="tab-btn" onclick="switchTab(this, 'config')">
+                        Config
+                    </button>
+                </div>
+
+                <!-- BUILD TAB -->
+                <div id="tab-build" class="tab-panel active">
+                    <div class="code-window">
+                        <div class="code-window-bar">
+                            <span class="code-file">build_example.py</span>
+                            <button
+                                class="code-copy-btn"
+                                onclick="copyCode(this, 'code-build')"
+                            >
+                                Copy
+                            </button>
+                        </div>
+                        <pre
+                            class="code"
+                            id="code-build"
+                        ><span class="t-kw">from</span> <span class="t-cls">ragbucket</span> <span class="t-kw">import</span> <span class="t-cls">RagBuilder</span>, <span class="t-cls">RagConfig</span>
+
+<span class="t-cm"># Configure the pipeline</span>
+<span class="t-var">config</span> <span class="t-op">=</span> <span class="t-cls">RagConfig</span>(
+    <span class="t-var">embedding_model</span><span class="t-op">=</span><span class="t-str">"BAAI/bge-small-en-v1.5"</span>,
+    <span class="t-var">chunk_size</span><span class="t-op">=</span><span class="t-num">512</span>,
+    <span class="t-var">chunk_overlap</span><span class="t-op">=</span><span class="t-num">50</span>,
+    <span class="t-var">top_k</span><span class="t-op">=</span><span class="t-num">3</span>,
+)
+
+<span class="t-cm"># Build the .rag artifact</span>
+<span class="t-var">builder</span> <span class="t-op">=</span> <span class="t-cls">RagBuilder</span>(<span class="t-var">config</span><span class="t-op">=</span><span class="t-var">config</span>)
+
+<span class="t-var">builder</span>.<span class="t-fn">build</span>(
+    <span class="t-var">doc_path</span><span class="t-op">=</span><span class="t-str">"docs/"</span>,       <span class="t-cm"># folder of .txt files</span>
+    <span class="t-var">op_path</span><span class="t-op">=</span><span class="t-str">"demo.rag"</span>,    <span class="t-cm"># output artifact</span>
+)
+
+<span class="t-cm"># ✓ demo.rag created</span>
+<span class="t-cm"># Contains: vectors.faiss + chunks.json + manifest.json</span></pre>
+                    </div>
+                </div>
+
+                <!-- RUNTIME TAB -->
+                <div id="tab-runtime" class="tab-panel">
+                    <div class="code-window">
+                        <div class="code-window-bar">
+                            <span class="code-file">runtime_example.py</span>
+                            <button
+                                class="code-copy-btn"
+                                onclick="copyCode(this, 'code-runtime')"
+                            >
+                                Copy
+                            </button>
+                        </div>
+                        <pre
+                            class="code"
+                            id="code-runtime"
+                        ><span class="t-kw">from</span> <span class="t-cls">ragbucket</span> <span class="t-kw">import</span> <span class="t-cls">RagRuntime</span>
+<span class="t-kw">import</span> <span class="t-cls">os</span>
+<span class="t-kw">from</span> <span class="t-cls">dotenv</span> <span class="t-kw">import</span> <span class="t-fn">load_dotenv</span>
+
+<span class="t-fn">load_dotenv</span>()
+
+<span class="t-cm"># Load the artifact — works from any environment</span>
+<span class="t-var">rag</span> <span class="t-op">=</span> <span class="t-cls">RagRuntime</span>(
+    <span class="t-var">rag_path</span><span class="t-op">=</span><span class="t-str">"demo.rag"</span>,
+    <span class="t-var">provider</span><span class="t-op">=</span><span class="t-str">"groq"</span>,              <span class="t-cm"># groq | openai | gemini | anthropic</span>
+    <span class="t-var">api_key</span><span class="t-op">=</span><span class="t-cls">os</span>.<span class="t-fn">getenv</span>(<span class="t-str">"GROQ_API_KEY"</span>),
+    <span class="t-var">model</span><span class="t-op">=</span><span class="t-str">"llama-3.1-8b-instant"</span>,
+    <span class="t-var">system_prompt</span><span class="t-op">=</span><span class="t-str">"You are a helpful assistant."</span>,
+)
+
+<span class="t-cm"># Ask anything</span>
+<span class="t-var">response</span> <span class="t-op">=</span> <span class="t-var">rag</span>.<span class="t-fn">ask</span>(<span class="t-str">"What are Anik's AI/ML skills?"</span>)
+<span class="t-fn">print</span>(<span class="t-var">response</span>)</pre>
+                    </div>
+                </div>
+
+                <!-- CONFIG TAB -->
+                <div id="tab-config" class="tab-panel">
+                    <div class="code-window">
+                        <div class="code-window-bar">
+                            <span class="code-file">config.py</span>
+                            <button
+                                class="code-copy-btn"
+                                onclick="copyCode(this, 'code-config')"
+                            >
+                                Copy
+                            </button>
+                        </div>
+                        <pre
+                            class="code"
+                            id="code-config"
+                        ><span class="t-kw">from</span> <span class="t-cls">ragbucket</span> <span class="t-kw">import</span> <span class="t-cls">RagConfig</span>
+
+<span class="t-cm"># All fields are optional — defaults are sensible</span>
+<span class="t-var">config</span> <span class="t-op">=</span> <span class="t-cls">RagConfig</span>(
+
+    <span class="t-cm"># Any Sentence Transformers compatible model</span>
+    <span class="t-var">embedding_model</span><span class="t-op">=</span><span class="t-str">"BAAI/bge-small-en-v1.5"</span>,
+
+    <span class="t-cm"># Chunking</span>
+    <span class="t-var">chunk_size</span><span class="t-op">=</span><span class="t-num">512</span>,
+    <span class="t-var">chunk_overlap</span><span class="t-op">=</span><span class="t-num">50</span>,
+
+    <span class="t-cm"># How many chunks to retrieve per query</span>
+    <span class="t-var">top_k</span><span class="t-op">=</span><span class="t-num">3</span>,
+)
+
+<span class="t-cm"># Supported embedding models:</span>
+<span class="t-cm"># "BAAI/bge-small-en-v1.5"          fast, great for English</span>
+<span class="t-cm"># "BAAI/bge-base-en-v1.5"           balanced quality/speed</span>
+<span class="t-cm"># "sentence-transformers/all-MiniLM-L6-v2"</span>
+<span class="t-cm"># "sentence-transformers/all-mpnet-base-v2"</span></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROVIDERS -->
+        <section id="providers">
+            <div class="container">
+                <span class="eyebrow" data-reveal>Multi-Provider Runtime</span>
+                <h2 class="section-title" data-reveal>
+                    Swap LLMs without<br />touching your pipeline.
+                </h2>
+                <p class="section-lead" data-reveal>
+                    One unified interface. Four providers. Zero lock-in.
+                </p>
+
+                <div class="providers-grid">
+                    <div class="provider-card" data-reveal data-delay="1">
+                        <div class="provider-icon">⚡</div>
+                        <div class="provider-name">Groq</div>
+                        <div class="provider-model">llama-3.1-8b-instant</div>
+                    </div>
+                    <div class="provider-card" data-reveal data-delay="2">
+                        <div class="provider-icon">🤖</div>
+                        <div class="provider-name">OpenAI</div>
+                        <div class="provider-model">gpt-4o-mini</div>
+                    </div>
+                    <div class="provider-card" data-reveal data-delay="3">
+                        <div class="provider-icon">💎</div>
+                        <div class="provider-name">Gemini</div>
+                        <div class="provider-model">gemini-1.5-flash</div>
+                    </div>
+                    <div class="provider-card" data-reveal data-delay="4">
+                        <div class="provider-icon">🔮</div>
+                        <div class="provider-name">Anthropic</div>
+                        <div class="provider-model">claude-3-haiku</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section id="features">
+            <div class="container">
+                <span class="eyebrow" data-reveal>Features</span>
+                <h2 class="section-title" data-reveal>
+                    Everything you need.<br />Nothing you don't.
+                </h2>
+
+                <div class="features-grid">
+                    <div class="feature-card" data-reveal data-delay="1">
+                        <div class="feature-icon">📦</div>
+                        <div class="feature-title">Portable Artifacts</div>
+                        <div class="feature-desc">
+                            Serialize your entire RAG pipeline into a single
+                            reusable .rag file. Build once, run everywhere.
+                        </div>
+                    </div>
+                    <div class="feature-card" data-reveal data-delay="2">
+                        <div class="feature-icon">🔍</div>
+                        <div class="feature-title">
+                            Built-in Semantic Search
+                        </div>
+                        <div class="feature-desc">
+                            FAISS-powered vector similarity search. No external
+                            vector database required.
+                        </div>
+                    </div>
+                    <div class="feature-card" data-reveal data-delay="3">
+                        <div class="feature-icon">🔌</div>
+                        <div class="feature-title">Multi-Provider Runtime</div>
+                        <div class="feature-desc">
+                            Groq, OpenAI, Gemini, Anthropic — all behind one
+                            unified interface. Swap with one line.
+                        </div>
+                    </div>
+                    <div class="feature-card" data-reveal data-delay="1">
+                        <div class="feature-icon">⚙️</div>
+                        <div class="feature-title">Configurable Pipeline</div>
+                        <div class="feature-desc">
+                            Customize chunk size, overlap, embedding model, and
+                            top-k via RagConfig. Defaults just work.
+                        </div>
+                    </div>
+                    <div class="feature-card" data-reveal data-delay="2">
+                        <div class="feature-icon">🏃</div>
+                        <div class="feature-title">Lightweight Runtime</div>
+                        <div class="feature-desc">
+                            Load and execute .rag artifacts anywhere Python
+                            runs. No server, no infrastructure.
+                        </div>
+                    </div>
+                    <div class="feature-card" data-reveal data-delay="3">
+                        <div class="feature-icon">🧠</div>
+                        <div class="feature-title">Self-Contained Memory</div>
+                        <div class="feature-desc">
+                            The artifact IS the retrieval system. Semantic
+                            memory travels with your code, not your infra.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STACK -->
+        <section id="stack">
+            <div class="container">
+                <span class="eyebrow" data-reveal>Tech Stack</span>
+                <h2 class="section-title" data-reveal>
+                    Built on proven tools.
+                </h2>
+
+                <div class="stack-table" data-reveal>
+                    <div class="stack-row stack-head">
+                        <div class="stack-cell">Component</div>
+                        <div class="stack-cell">Technology</div>
+                        <div class="stack-cell">Role</div>
+                    </div>
+                    <div class="stack-row">
+                        <div class="stack-cell c-main">Embeddings</div>
+                        <div class="stack-cell c-tech">
+                            Sentence Transformers
+                        </div>
+                        <div class="stack-cell">
+                            Converts text chunks to semantic vectors
+                        </div>
+                    </div>
+                    <div class="stack-row">
+                        <div class="stack-cell c-main">Vector Search</div>
+                        <div class="stack-cell c-tech">FAISS</div>
+                        <div class="stack-cell">
+                            L2 similarity search at inference time
+                        </div>
+                    </div>
+                    <div class="stack-row">
+                        <div class="stack-cell c-main">Chunking</div>
+                        <div class="stack-cell c-tech">LangChain Splitters</div>
+                        <div class="stack-cell">
+                            Recursive character-aware text splitting
+                        </div>
+                    </div>
+                    <div class="stack-row">
+                        <div class="stack-cell c-main">Packaging</div>
+                        <div class="stack-cell c-tech">zipfile</div>
+                        <div class="stack-cell">
+                            Compresses artifact into portable archive
+                        </div>
+                    </div>
+                    <div class="stack-row">
+                        <div class="stack-cell c-main">Config</div>
+                        <div class="stack-cell c-tech">Pydantic</div>
+                        <div class="stack-cell">
+                            Validated, typed configuration schema
+                        </div>
+                    </div>
+                    <div class="stack-row">
+                        <div class="stack-cell c-main">Build System</div>
+                        <div class="stack-cell c-tech">Hatchling</div>
+                        <div class="stack-cell">
+                            PyPI packaging and distribution
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <img src="img/ragbucket.png" alt="RagBucket" class="footer-logo" />
+            <p class="footer-tagline">
+                The portable runtime layer for Retrieval-Augmented Generation
+                systems.<br />
+                Build once. Share anywhere. Execute everywhere.
+            </p>
+            <div class="footer-links">
+                <a href="https://pypi.org/project/ragbucket/" target="_blank"
+                    >PyPI</a
+                >
+                <a
+                    href="https://github.com/anikchand461/ragbucket"
+                    target="_blank"
+                    >GitHub</a
+                >
+                <a href="https://dev.to/anikchand461" target="_blank">DEV.to</a>
+                <a href="mailto:anikchand461@gmail.com">Contact</a>
+            </div>
+            <p class="footer-copy">MIT License · Built by Anik Chand</p>
+        </footer>
+
+        <script src="index.js"></script>
+    </body>
+</html>
