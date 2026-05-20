@@ -6,7 +6,7 @@
 
 <br/>
 
-# ◈ RagBucket
+# RagBucket
 
 <h3><em>Portable Executable RAG Artifacts for Python</em></h3>
 
