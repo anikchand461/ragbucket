@@ -1,73 +1,108 @@
 <div align="center">
 
-<img src="frontend/img/ragbucket.png" alt="RagBucket Logo" width="140" />
+<br/>
 
-# RagBucket
+<img src="frontend/img/ragbucket.png" alt="RagBucket Logo" width="160" />
 
-### Portable Executable RAG Artifacts for Python
+<br/>
 
-**Build once. Load anywhere.**
+# ◈ RagBucket
 
-[![PyPI version](https://img.shields.io/pypi/v/ragbucket?style=for-the-badge&color=FFD700&labelColor=1a1a2e)](https://pypi.org/project/ragbucket/)
-[![Python](https://img.shields.io/pypi/pyversions/ragbucket?style=for-the-badge&color=4FC3F7&labelColor=1a1a2e)](https://pypi.org/project/ragbucket/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-A8FF78?style=for-the-badge&labelColor=1a1a2e)](LICENSE)
-[![Downloads](https://img.shields.io/pypi/dm/ragbucket?style=for-the-badge&color=FF6B9D&labelColor=1a1a2e)](https://pypi.org/project/ragbucket/)
+<h3><em>Portable Executable RAG Artifacts for Python</em></h3>
+
+**Build once. Load anywhere. Query forever.**
+
+<br/>
+
+[![PyPI version](https://img.shields.io/pypi/v/ragbucket?style=for-the-badge&color=FFD700&labelColor=0d0d1a&logo=python&logoColor=FFD700)](https://pypi.org/project/ragbucket/)
+[![Python](https://img.shields.io/pypi/pyversions/ragbucket?style=for-the-badge&color=4FC3F7&labelColor=0d0d1a)](https://pypi.org/project/ragbucket/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-A8FF78?style=for-the-badge&labelColor=0d0d1a)](LICENSE)
+[![Downloads](https://img.shields.io/pypi/dm/ragbucket?style=for-the-badge&color=FF6B9D&labelColor=0d0d1a)](https://pypi.org/project/ragbucket/)
+[![Website](https://img.shields.io/badge/Website-ragbucket.vercel.app-c084fc?style=for-the-badge&labelColor=0d0d1a&logo=vercel&logoColor=c084fc)](https://ragbucket.vercel.app)
+
+<br/>
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║   RAG systems were never meant to be locked to infrastructure ║
+║   RagBucket sets them free.                                   ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+<br/>
 
 <p>
-  <a href="#-installation">Installation</a> •
-  <a href="#-quickstart">Quickstart</a> •
-  <a href="#-what-is-ragbucket">What is RagBucket?</a> •
-  <a href="#-multi-provider-runtime">Providers</a> •
+  <a href="#-the-problem">Problem</a> ·
+  <a href="#-introducing-rag">The .rag Format</a> ·
+  <a href="#-installation">Install</a> ·
+  <a href="#-quickstart">Quickstart</a> ·
+  <a href="#-multi-provider-runtime">Providers</a> ·
   <a href="#-roadmap">Roadmap</a>
 </p>
+
+<br/>
 
 </div>
 
 ---
 
-## The Problem
+## ◈ The Problem
 
-Traditional ML models are portable by default:
+Every major ML format is portable by default:
 
 ```
-model.pt   model.onnx   model.gguf   model.h5
+model.pt   ·   model.onnx   ·   model.gguf   ·   model.h5
 ```
 
-They can be saved, shared, and deployed anywhere. **RAG systems can't.**
+You save them, share them, deploy them anywhere.
 
-A typical RAG pipeline is a fragile web of:
+**RAG systems can't do any of that.**
 
-- vector databases tied to infrastructure
-- embedding pipelines that must be re-run
-- chunking configs scattered across codebases
-- provider-specific integrations with no portability
-- metadata that lives nowhere and everywhere
+A typical RAG pipeline is a fragile web of moving parts:
 
-**RagBucket solves this.** It packages your entire RAG pipeline — vectors, chunks, config, and runtime metadata — into a single portable `.rag` artifact.
+```
+❌  Vector databases tied to specific infrastructure
+❌  Embedding pipelines that must be rebuilt from scratch
+❌  Chunking configs scattered across codebases
+❌  Provider-specific integrations with zero portability
+❌  Metadata that lives nowhere and everywhere at once
+```
+
+Every time you switch environments — laptop to server, dev to prod, team to team — you rebuild the whole thing. **That's broken.**
+
+**RagBucket fixes this.**
+
+It packages your entire RAG pipeline — vectors, chunks, config, and runtime metadata — into a single portable `.rag` artifact. Like a model checkpoint, but for retrieval intelligence.
 
 ---
 
-## Introducing `.rag`
+## ◈ Introducing `.rag`
 
 <div align="center">
 <img src="frontend/img/main.png" alt="RagBucket Architecture" width="800" />
 </div>
 
-A `.rag` artifact is a **self-contained, executable unit of retrieval intelligence**. It packages:
+<br/>
 
-| What                    | How                         |
-| ----------------------- | --------------------------- |
-| Semantic embeddings     | via Sentence Transformers   |
-| Vector index            | via FAISS                   |
-| Chunked knowledge       | via LangChain splitters     |
-| Retrieval configuration | embedded in manifest        |
-| Runtime metadata        | versioned artifact manifest |
+A `.rag` artifact is a **self-contained, executable unit of retrieval intelligence.** It is not a config file. It is not a directory. It is a complete, ready-to-run retrieval system.
 
-**Build it once. Drop it anywhere. Query it with one line of code.**
+| What it stores              | How it stores it             |
+| :-------------------------- | :--------------------------- |
+| Semantic embeddings         | via Sentence Transformers    |
+| Vector index                | via FAISS                    |
+| Chunked knowledge           | via LangChain splitters      |
+| Retrieval configuration     | embedded in manifest         |
+| Runtime metadata            | versioned artifact manifest  |
+
+```
+Build it once.
+Drop it anywhere.
+Query it with one line of code.
+```
 
 ---
 
-## Full Architecture
+## ◈ Full Architecture
 
 <div align="center">
 <img src="frontend/img/workflow.png" alt="RagBucket Full Workflow" width="900" />
@@ -75,7 +110,7 @@ A `.rag` artifact is a **self-contained, executable unit of retrieval intelligen
 
 ---
 
-## ✦ Installation
+## ◈ Installation
 
 ```bash
 # Using uv (recommended)
@@ -85,76 +120,61 @@ uv add ragbucket
 pip install ragbucket
 ```
 
+> **Lightweight by default.** Local embedding dependencies are only pulled in when you set `embedding_provider="local"`. Cloud providers add nothing to your base install.
+
 ---
 
-````md id="tk5rxv"
-## ⚡ Quickstart
+## ◈ Quickstart
 
 ### Step 1 — Build a Portable `.rag` Artifact
 
 ```python
-from ragbucket import RagBuilder
-from ragbucket import RagConfig
-
+from ragbucket import RagBuilder, RagConfig
 import os
-
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
-
 config = RagConfig(
 
-    # ------------------------------------
-    # EMBEDDING PROVIDER
-    # ------------------------------------
-    embedding_provider="cohere",
+    # ── Embedding Provider ────────────────────────────────────
+    embedding_provider = "cohere",
+    embedding_model    = "embed-english-v3.0",
+    embedding_api_key  = os.getenv("COHERE_API_KEY"),
 
-    embedding_model="embed-english-v3.0",
+    # ── Chunking ──────────────────────────────────────────────
+    chunk_size    = 512,
+    chunk_overlap = 50,
 
-    embedding_api_key=os.getenv("COHERE_API_KEY"),
-
-    # ------------------------------------
-    # CHUNKING
-    # ------------------------------------
-    chunk_size=512,
-
-    chunk_overlap=50,
-
-    # ------------------------------------
-    # RETRIEVAL
-    # ------------------------------------
-    top_k=3
+    # ── Retrieval ─────────────────────────────────────────────
+    top_k = 3,
 )
 
-
-builder = RagBuilder(
-    config=config
-)
-
+builder = RagBuilder(config=config)
 
 builder.build(
-    doc_path="docs/",
-    op_path="artifacts/demo.rag"
+    doc_path = "docs/",
+    op_path  = "artifacts/demo.rag",
 )
 ```
 
-This generates:
+This generates a single portable artifact:
 
-```text
-artifacts/demo.rag
+```
+artifacts/
+└── demo.rag          ← your entire RAG pipeline, packaged
 ```
 
-The `.rag` artifact contains:
+Containing:
 
-- vector embeddings
-- FAISS index
-- document chunks
-- retrieval configuration
-- artifact metadata
+```
+demo.rag
+├── vectors.faiss     ← semantic vector index
+├── chunks.json       ← chunked document memory
+└── manifest.json     ← embedding config + metadata
+```
 
-Build once. Query anywhere.
+**Build once. Query anywhere.**
 
 ---
 
@@ -162,256 +182,162 @@ Build once. Query anywhere.
 
 ```python
 from ragbucket import RagRuntime
-
 import os
-
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
-
-system_prompt = """
-You are a helpful assistant.
-
-Keep answers short and crisp.
-"""
-
-
 rag = RagRuntime(
 
-    # ------------------------------------
-    # RAG ARTIFACT
-    # ------------------------------------
-    rag_path="artifacts/demo.rag",
+    # ── RAG Artifact ──────────────────────────────────────────
+    rag_path = "artifacts/demo.rag",
 
-    # ------------------------------------
-    # GENERATION PROVIDER
-    # ------------------------------------
-    provider="groq",
+    # ── Generation Provider ───────────────────────────────────
+    provider = "groq",
+    api_key  = os.getenv("GROQ_API_KEY"),
+    model    = "llama-3.1-8b-instant",
 
-    api_key=os.getenv("GROQ_API_KEY"),
+    # ── Embedding Provider Key ────────────────────────────────
+    embedding_api_key = os.getenv("COHERE_API_KEY"),
 
-    model="llama-3.1-8b-instant",
-
-    # ------------------------------------
-    # EMBEDDING PROVIDER KEY
-    # ------------------------------------
-    embedding_api_key=os.getenv("COHERE_API_KEY"),
-
-    # ------------------------------------
-    # SYSTEM PROMPT
-    # ------------------------------------
-    system_prompt=system_prompt
+    # ── System Prompt ─────────────────────────────────────────
+    system_prompt = "You are a helpful assistant. Keep answers short and crisp.",
 )
 
-
-response = rag.ask(
-    "What are Anik's AI/ML skills?"
-)
-
+response = rag.ask("What are Anik's AI/ML skills?")
 print(response)
 ```
 
----
-
-## 🔌 Multi-Provider Runtime
-
-RagBucket separates:
-
-- retrieval embeddings
-- response generation
-
-This allows fully modular AI pipelines.
+That's it. No vector DB to spin up. No pipeline to reconstruct. Just load and ask.
 
 ---
 
-### Supported Generation Providers
+## ◈ Multi-Provider Runtime
 
-| Provider    | Example Model             |
-| ----------- | ------------------------- |
-| `groq`      | `llama-3.1-8b-instant`    |
-| `openai`    | `gpt-4o-mini`             |
-| `gemini`    | `gemini-1.5-flash`        |
-| `anthropic` | `claude-3-haiku-20240307` |
+RagBucket cleanly separates **retrieval** from **generation** — meaning you can mix and match embedding providers with generation providers freely.
 
-Example:
+### Generation Providers
+
+| Provider      | Example Model                 |
+| :------------ | :---------------------------- |
+| `groq`        | `llama-3.1-8b-instant`        |
+| `openai`      | `gpt-4o-mini`                 |
+| `gemini`      | `gemini-1.5-flash`            |
+| `anthropic`   | `claude-3-haiku-20240307`     |
 
 ```python
+# Swap providers without touching anything else
 rag = RagRuntime(
-
-    rag_path="demo.rag",
-
-    provider="openai",
-
-    api_key=os.getenv("OPENAI_API_KEY"),
-
-    model="gpt-4o-mini",
-
-    embedding_api_key=os.getenv("COHERE_API_KEY")
+    rag_path  = "demo.rag",
+    provider  = "anthropic",
+    api_key   = os.getenv("ANTHROPIC_API_KEY"),
+    model     = "claude-3-haiku-20240307",
+    embedding_api_key = os.getenv("COHERE_API_KEY"),
 )
 ```
 
----
+### Embedding Providers
 
-## 🧠 Modular Embedding Providers
-
-RagBucket supports multiple embedding systems.
-
-| Provider | Example Model            |
-| -------- | ------------------------ |
-| `local`  | `BAAI/bge-small-en-v1.5` |
-| `cohere` | `embed-english-v3.0`     |
-| `openai` | `text-embedding-3-small` |
-| `gemini` | `models/embedding-001`   |
-| `voyage` | `voyage-large-2`         |
-
-Example:
+| Provider    | Example Model                       |
+| :---------- | :---------------------------------- |
+| `local`     | `BAAI/bge-small-en-v1.5`            |
+| `cohere`    | `embed-english-v3.0`                |
+| `openai`    | `text-embedding-3-small`            |
+| `gemini`    | `models/embedding-001`              |
+| `voyage`    | `voyage-large-2`                    |
 
 ```python
+# Use any embedding provider at build time
 config = RagConfig(
-
-    embedding_provider="openai",
-
-    embedding_model="text-embedding-3-small",
-
-    embedding_api_key=os.getenv("OPENAI_API_KEY")
+    embedding_provider = "openai",
+    embedding_model    = "text-embedding-3-small",
+    embedding_api_key  = os.getenv("OPENAI_API_KEY"),
 )
 ```
 
 ---
 
-## ⚙️ Dynamic Retrieval Configuration
+## ◈ Dynamic Retrieval Configuration
 
-Customize every stage of the retrieval pipeline:
+Every stage of the retrieval pipeline is configurable. Sane defaults are always applied automatically.
 
 ```python
 from ragbucket import RagConfig
 
-
 config = RagConfig(
 
     # Embedding system
-    embedding_provider="local",
-
-    embedding_model="sentence-transformers/all-MiniLM-L6-v2",
+    embedding_provider = "local",
+    embedding_model    = "sentence-transformers/all-MiniLM-L6-v2",
 
     # Chunking
-    chunk_size=1024,
-
-    chunk_overlap=100,
+    chunk_size    = 1024,
+    chunk_overlap = 100,
 
     # Retrieval
-    top_k=5
+    top_k = 5,
 )
 ```
 
-All missing values are automatically filled using framework defaults.
+> All missing values are filled using framework defaults. Nothing breaks if you leave something out.
 
 ---
 
-## 🪶 Lightweight by Default
+## ◈ What a `.rag` Artifact Contains
 
-RagBucket no longer forces heavyweight local AI dependencies.
-
-The core package remains lightweight.
-
-Local embedding dependencies are only required when using:
-
-```python
-embedding_provider="local"
 ```
-
-This enables:
-
-- lightweight installations
-- faster deployments
-- cloud/serverless compatibility
-- provider-based embedding pipelines
-
----
-
-## 📦 What a `.rag` Artifact Contains
-
-```text
 demo.rag
 │
-├── vectors.faiss
-├── chunks.json
-├── manifest.json
+├── vectors.faiss     ← FAISS vector index (semantic search backbone)
+├── chunks.json       ← document chunks with source metadata
+└── manifest.json     ← embedding config, top_k, model info, version
 ```
 
-The artifact stores:
-
-- semantic vectors
-- retrieval memory
-- embedding configuration
-- retrieval settings
-- runtime metadata
-
-making the retrieval system:
-
-- portable
-- reusable
-- executable
-- shareable
-````
+The artifact is entirely self-describing. Anyone who receives a `.rag` file has everything needed to query it — no external config, no infrastructure dependencies, no guesswork.
 
 ---
 
-## 🏗️ Project Structure
+## ◈ Technology Stack
+
+| Component           | Technology                  |
+| :------------------ | :-------------------------- |
+| Embeddings          | Sentence Transformers       |
+| Vector Search       | FAISS                       |
+| Chunking            | LangChain Text Splitters    |
+| Artifact Packaging  | Python `zipfile`            |
+| Config Validation   | Pydantic                    |
+| Runtime             | Pure Python                 |
+
+---
+
+## ◈ Philosophy
+
+> *RAG systems should be as portable as model files. Not as fragile as microservice stacks.*
+
+RagBucket treats RAG systems as **portable intelligence artifacts** — not fragile infrastructure pipelines. This cleanly separates two concerns that have no business being coupled:
 
 ```
-ragbucket/
-├── builder/
-│   ├── builder.py      ← RagBuilder orchestrator
-│   ├── chunker.py      ← LangChain recursive splitter
-│   ├── embedder.py     ← Sentence Transformers encoder
-│   ├── indexer.py      ← FAISS index builder
-│   └── packager.py     ← .rag artifact packaging
-├── runtime/
-│   ├── runtime.py      ← RagRuntime orchestrator
-│   ├── loader.py       ← .rag artifact loader
-│   ├── retriever.py    ← Semantic vector retrieval
-│   ├── models.py       ← Cached embedding model singleton
-│   └── providers/      ← Groq / OpenAI / Gemini / Anthropic
-├── schemas/
-│   ├── config.py       ← RagConfig Pydantic model
-│   └── manifest.py     ← Artifact manifest schema
-└── utils/
-    ├── file_utils.py   ← Document loading helpers
-    └── hashing.py      ← Artifact integrity utilities
+Retrieval memory   →  what you built      →  lives in the .rag file
+Language generation →  how you query it   →  any provider, any environment
 ```
 
----
+Your retrieval knowledge travels with your code. Swap generation providers without rebuilding anything. Share a `.rag` file like you'd share a model checkpoint.
 
-## 🧰 Technology Stack
-
-| Component          | Technology               |
-| ------------------ | ------------------------ |
-| Embeddings         | Sentence Transformers    |
-| Vector Search      | FAISS                    |
-| Chunking           | LangChain Text Splitters |
-| Artifact Packaging | Python `zipfile`         |
-| Config Validation  | Pydantic                 |
-| Runtime            | Pure Python              |
+The result: reusable semantic memory that is fully decoupled from infrastructure.
 
 ---
 
-## ✦ Philosophy
+## ◈ Links
 
-RagBucket treats RAG systems as **portable intelligence artifacts** — not fragile infrastructure pipelines.
-
-This cleanly separates:
-
-- **Retrieval memory** (what you built) → lives in the `.rag` file
-- **Language generation** (how you query it) → any provider, any environment
-
-The result: reusable semantic memory that travels with your code.
+| Resource   | URL                                                               |
+| :--------- | :---------------------------------------------------------------- |
+| Website    | [ragbucket.vercel.app](https://ragbucket.vercel.app)             |
+| PyPI       | [pypi.org/project/ragbucket](https://pypi.org/project/ragbucket) |
+| GitHub     | [github.com/anikchand461/ragbucket](https://github.com/anikchand461/ragbucket) |
 
 ---
 
-## 📄 License
+## ◈ License
 
 MIT License — see [LICENSE](LICENSE) for details.
 
@@ -419,8 +345,16 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-**RagBucket** · Built by [Anik Chand](https://github.com/anikchand461)
+<br/>
 
-_The portable runtime layer for Retrieval-Augmented Generation systems._
+```
+◈ RagBucket
+```
+
+*The portable runtime layer for Retrieval-Augmented Generation systems.*
+
+Built by [Anik Chand](https://github.com/anikchand461) · [ragbucket.vercel.app](https://ragbucket.vercel.app)
+
+<br/>
 
 </div>
