@@ -3,7 +3,6 @@ import json
 
 from ragbucket.builder.chunker import Chunker
 from ragbucket.builder.indexer import Indexer
-from ragbucket.builder.embedder import Embedder
 from ragbucket.builder.packager import Packager
 
 from ragbucket.constants import ARTIFACT_VERSION

@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>RAGBucket</title>
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                scroll-behavior: smooth;
+                font-family: Inter, sans-serif;
+            }
+
+            body {
+                background: #070707;
+                color: white;
+                overflow-x: hidden;
+            }
+
+            canvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: -1;
+            }
+
+            nav {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 22px 70px;
+                position: fixed;
+                top: 0;
+                z-index: 100;
+                backdrop-filter: blur(10px);
+                background: rgba(0, 0, 0, 0.35);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            nav h1 {
+                font-size: 28px;
+                font-weight: 800;
+                color: #ffe600;
+                letter-spacing: 1px;
+            }
+
+            nav .links {
+                display: flex;
+                gap: 28px;
+            }
+
+            nav a {
+                text-decoration: none;
+                color: #d6d6d6;
+                transition: 0.3s;
+                font-size: 15px;
+            }
+
+            nav a:hover {
+                color: #00d9ff;
+            }
+
+            .hero {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                flex-direction: column;
+                padding: 0 20px;
+            }
+
+            .logo {
+                width: 180px;
+                margin-bottom: 30px;
+                filter: drop-shadow(0 0 25px rgba(255, 230, 0, 0.5));
+                animation: float 4s ease-in-out infinite;
+            }
+
+            @keyframes float {
+                0% {
+                    transform: translateY(0px);
+                }
+                50% {
+                    transform: translateY(-12px);
+                }
+                100% {
+                    transform: translateY(0px);
+                }
+            }
+
+            .hero h2 {
+                font-size: 78px;
+                line-height: 1;
+                margin-bottom: 20px;
+                background: linear-gradient(90deg, #fff, #ffe600, #00d9ff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                max-width: 1000px;
+            }
+
+            .hero p {
+                max-width: 850px;
+                color: #bcbcbc;
+                font-size: 20px;
+                line-height: 1.8;
+            }
+
+            .buttons {
+                margin-top: 40px;
+                display: flex;
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .btn {
+                padding: 16px 28px;
+                border-radius: 16px;
+                text-decoration: none;
+                font-weight: 700;
+                transition: 0.3s ease;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .primary {
+                background: #ffe600;
+                color: black;
+            }
+
+            .secondary {
+                background: rgba(255, 255, 255, 0.05);
+                color: white;
+            }
+
+            .btn:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+            }
+
+            section {
+                padding: 130px 80px;
+                position: relative;
+            }
+
+            .section-title {
+                font-size: 52px;
+                margin-bottom: 18px;
+            }
+
+            .section-sub {
+                color: #b8b8b8;
+                max-width: 900px;
+                line-height: 1.8;
+                margin-bottom: 60px;
+            }
+
+            .cards {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 28px;
+            }
+
+            .card {
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 24px;
+                padding: 30px;
+                transition: 0.35s ease;
+                backdrop-filter: blur(8px);
+            }
+
+            .card:hover {
+                transform: translateY(-10px) scale(1.02);
+                border-color: rgba(255, 230, 0, 0.3);
+                box-shadow: 0 0 30px rgba(255, 230, 0, 0.08);
+            }
+
+            .card h3 {
+                margin-bottom: 14px;
+                font-size: 24px;
+                color: #ffe600;
+            }
+
+            .card p {
+                color: #cfcfcf;
+                line-height: 1.7;
+            }
+
+            .architecture {
+                margin-top: 40px;
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 30px;
+                padding: 40px;
+                overflow-x: auto;
+            }
+
+            pre {
+                color: #00d9ff;
+                line-height: 1.8;
+                font-size: 15px;
+            }
+
+            .code-box {
+                margin-top: 30px;
+                background: #050505;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 24px;
+                padding: 30px;
+                overflow-x: auto;
+            }
+
+            code {
+                color: #ffe600;
+                line-height: 1.8;
+                font-size: 15px;
+                white-space: pre;
+            }
+
+            .footer {
+                text-align: center;
+                padding: 80px 20px;
+                color: #9f9f9f;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            .footer a {
+                color: #00d9ff;
+                text-decoration: none;
+            }
+
+            @media (max-width: 900px) {
+                nav {
+                    padding: 20px;
+                }
+
+                .hero h2 {
+                    font-size: 50px;
+                }
+
+                section {
+                    padding: 110px 24px;
+                }
+
+                .section-title {
+                    font-size: 38px;
+                }
+
+                nav .links {
+                    display: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="bg"></canvas>
+
+        <nav>
+            <h1>RAGBucket</h1>
+
+            <div class="links">
+                <a href="#features">Features</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#quickstart">Quickstart</a>
+                <a href="#links">Links</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <img class="logo" src="img/ragbucket.png" alt="logo" />
+
+            <h2>Portable Executable RAG Artifacts</h2>
+
+            <p>
+                Build once. Query anywhere. RAGBucket transforms documents into
+                portable .rag artifacts containing vectors, chunks, metadata,
+                and retrieval configuration.
+            </p>
+
+            <div class="buttons">
+                <a
+                    class="btn primary"
+                    href="https://github.com/anikchand461/ragbucket"
+                    target="_blank"
+                >
+                    GitHub
+                </a>
+
+                <a
+                    class="btn secondary"
+                    href="https://pypi.org/project/ragbucket/"
+                    target="_blank"
+                >
+                    PyPI
+                </a>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2 class="section-title">Why RAGBucket?</h2>
+
+            <p class="section-sub">
+                Modern retrieval systems should be portable, modular,
+                lightweight, and provider-agnostic. RAGBucket gives you a
+                complete executable RAG pipeline packed into a single artifact.
+            </p>
+
+            <div class="cards">
+                <div class="card">
+                    <h3>.rag Artifacts</h3>
+                    <p>
+                        Store vectors, chunks, manifest configuration, and
+                        retrieval metadata inside one portable executable file.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>Multi-Provider AI</h3>
+                    <p>
+                        Use Groq, OpenAI, Gemini, Anthropic, Cohere, local
+                        embeddings, and more using one clean abstraction.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>Lightweight Core</h3>
+                    <p>
+                        Heavy dependencies are optional. Local embedding models
+                        download only when required.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>Portable Runtime</h3>
+                    <p>
+                        Build retrieval memory once and deploy it across
+                        different environments instantly.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2 class="section-title">System Architecture</h2>
+
+            <p class="section-sub">
+                RAGBucket separates retrieval, embeddings, indexing, packaging,
+                and generation into independent modular layers.
+            </p>
+
+            <div class="architecture">
+                <pre>
+Documents (.txt)
+        ↓
+Chunker
+        ↓
+Embedding Provider
+(local / cohere / openai / gemini)
+        ↓
+FAISS Index
+        ↓
+Packager
+        ↓
+Portable .rag Artifact
+        ↓
+RagRuntime
+        ↓
+Retriever
+        ↓
+LLM Provider
+(groq / openai / gemini / anthropic)
+        ↓
+Generated Response
+      </pre
+                >
+            </div>
+        </section>
+
+        <section id="quickstart">
+            <h2 class="section-title">Quickstart</h2>
+
+            <p class="section-sub">
+                Build your first portable retrieval artifact in minutes.
+            </p>
+
+            <div class="code-box">
+                <code>
+                    from ragbucket import RagBuilder, RagConfig config =
+                    RagConfig( embedding_provider="cohere",
+                    embedding_model="embed-english-v3.0" ) builder =
+                    RagBuilder(config=config) builder.build( doc_path="docs/",
+                    op_path="artifacts/demo.rag" )
+                </code>
+            </div>
+        </section>
+
+        <section id="links">
+            <h2 class="section-title">Explore</h2>
+
+            <div class="cards">
+                <a
+                    class="card"
+                    href="https://github.com/anikchand461/ragbucket"
+                    target="_blank"
+                    style="text-decoration: none"
+                >
+                    <h3>GitHub Repository</h3>
+                    <p>
+                        Explore the source code, architecture, roadmap, and
+                        future plans of RagBucket.
+                    </p>
+                </a>
+
+                <a
+                    class="card"
+                    href="https://pypi.org/project/ragbucket/"
+                    target="_blank"
+                    style="text-decoration: none"
+                >
+                    <h3>PyPI Package</h3>
+                    <p>
+                        Install RagBucket instantly and start building portable
+                        RAG systems.
+                    </p>
+                </a>
+            </div>
+        </section>
+
+        <div class="footer">
+            Built by
+            <a href="https://github.com/anikchand461" target="_blank"
+                >Anik Chand</a
+            >
+            • RAGBucket
+        </div>
+
+        <script>
+            const canvas = document.getElementById("bg");
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 2,
+                    dx: (Math.random() - 0.5) * 0.5,
+                    dy: (Math.random() - 0.5) * 0.5,
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach((p) => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = "rgba(255,255,255,0.18)";
+                    ctx.fill();
+
+                    p.x += p.dx;
+                    p.y += p.dy;
+
+                    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            window.addEventListener("resize", () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        </script>
+    </body>
+</html>
