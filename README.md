@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/img/ragbucket.png" alt="RagBucket Logo" width="140" />
+<img src="![logo](https://raw.githubusercontent.com/anikchand461/ragbucket/main/frontend/img/ragbucket.png)" alt="RagBucket Logo" width="140" />
 
 # RagBucket
 
