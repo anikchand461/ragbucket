@@ -9,6 +9,8 @@ from ragbucket.builder.packager import Packager
 from ragbucket.constants import ARTIFACT_VERSION
 from ragbucket.utils.file_utils import get_text_files
 from ragbucket.schemas.config import RagConfig
+from ragbucket.embeddings.factory import get_embedder
+
 
 class RagBuilder:
 
@@ -19,7 +21,11 @@ class RagBuilder:
 
         self.config = config
         self.chunker = Chunker(config)
-        self.embedder = Embedder(config)
+        self.embedder = get_embedder(
+            provider=config.embedding_provider,
+            model=config.embedding_model,
+            api_key=config.embedding_api_key
+        )
         self.indexer = Indexer()
         self.packager = Packager()
 
@@ -46,14 +52,33 @@ class RagBuilder:
         index = self.indexer.build_index(embeddings)
 
         manifest = {
-            "artifact_version" : ARTIFACT_VERSION,
-            "vector_store" : "faiss",
-            "created_by" : "ragbucket",
-            "config" : {
-                "embedding_model" : self.config.embedding_model,
-                "chunk_size" : self.config.chunk_size,
-                "chunk_overlap" : self.config.chunk_overlap,
-                "top_k" : self.config.top_k
+
+            "artifact_version": ARTIFACT_VERSION,
+
+            "vector_store": "faiss",
+
+            "created_by": "ragbucket",
+
+            "config": {
+
+                # --------------------------------
+                # EMBEDDING CONFIG
+                # --------------------------------
+                "embedding_provider": self.config.embedding_provider,
+
+                "embedding_model": self.config.embedding_model,
+
+                # --------------------------------
+                # CHUNKING CONFIG
+                # --------------------------------
+                "chunk_size": self.config.chunk_size,
+
+                "chunk_overlap": self.config.chunk_overlap,
+
+                # --------------------------------
+                # RETRIEVAL CONFIG
+                # --------------------------------
+                "top_k": self.config.top_k
             }
         }
 

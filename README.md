@@ -87,21 +87,52 @@ pip install ragbucket
 
 ---
 
+````md id="tk5rxv"
 ## ⚡ Quickstart
 
-### Step 1 — Build a `.rag` Artifact
+### Step 1 — Build a Portable `.rag` Artifact
 
 ```python
-from ragbucket import RagBuilder, RagConfig
+from ragbucket import RagBuilder
+from ragbucket import RagConfig
+
+import os
+
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 
 config = RagConfig(
-    embedding_model="BAAI/bge-small-en-v1.5",
+
+    # ------------------------------------
+    # EMBEDDING PROVIDER
+    # ------------------------------------
+    embedding_provider="cohere",
+
+    embedding_model="embed-english-v3.0",
+
+    embedding_api_key=os.getenv("COHERE_API_KEY"),
+
+    # ------------------------------------
+    # CHUNKING
+    # ------------------------------------
     chunk_size=512,
+
     chunk_overlap=50,
+
+    # ------------------------------------
+    # RETRIEVAL
+    # ------------------------------------
     top_k=3
 )
 
-builder = RagBuilder(config=config)
+
+builder = RagBuilder(
+    config=config
+)
+
 
 builder.build(
     doc_path="docs/",
@@ -109,34 +140,76 @@ builder.build(
 )
 ```
 
-This generates a single portable file:
+This generates:
 
-```
+```text
 artifacts/demo.rag
 ```
 
-That's it. Your entire retrieval system — vectors, chunks, config — is now in one file.
+The `.rag` artifact contains:
+
+- vector embeddings
+- FAISS index
+- document chunks
+- retrieval configuration
+- artifact metadata
+
+Build once. Query anywhere.
 
 ---
 
-### Step 2 — Load and Query Anywhere
+### Step 2 — Load and Query the Artifact
 
 ```python
 from ragbucket import RagRuntime
+
 import os
+
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
+
+system_prompt = """
+You are a helpful assistant.
+
+Keep answers short and crisp.
+"""
+
+
 rag = RagRuntime(
+
+    # ------------------------------------
+    # RAG ARTIFACT
+    # ------------------------------------
     rag_path="artifacts/demo.rag",
+
+    # ------------------------------------
+    # GENERATION PROVIDER
+    # ------------------------------------
     provider="groq",
+
     api_key=os.getenv("GROQ_API_KEY"),
+
     model="llama-3.1-8b-instant",
-    system_prompt="You are a helpful assistant. Keep answers short and crisp."
+
+    # ------------------------------------
+    # EMBEDDING PROVIDER KEY
+    # ------------------------------------
+    embedding_api_key=os.getenv("COHERE_API_KEY"),
+
+    # ------------------------------------
+    # SYSTEM PROMPT
+    # ------------------------------------
+    system_prompt=system_prompt
 )
 
-response = rag.ask("What are Anik's AI/ML skills?")
+
+response = rag.ask(
+    "What are Anik's AI/ML skills?"
+)
+
 print(response)
 ```
 
@@ -144,7 +217,16 @@ print(response)
 
 ## 🔌 Multi-Provider Runtime
 
-RagBucket ships with a unified provider abstraction. Swap LLMs without touching your retrieval logic.
+RagBucket separates:
+
+- retrieval embeddings
+- response generation
+
+This allows fully modular AI pipelines.
+
+---
+
+### Supported Generation Providers
 
 | Provider    | Example Model             |
 | ----------- | ------------------------- |
@@ -153,64 +235,127 @@ RagBucket ships with a unified provider abstraction. Swap LLMs without touching 
 | `gemini`    | `gemini-1.5-flash`        |
 | `anthropic` | `claude-3-haiku-20240307` |
 
+Example:
+
 ```python
-# Groq
-rag = RagRuntime(rag_path="demo.rag", provider="groq", model="llama-3.1-8b-instant", ...)
+rag = RagRuntime(
 
-# OpenAI
-rag = RagRuntime(rag_path="demo.rag", provider="openai", model="gpt-4o-mini", ...)
+    rag_path="demo.rag",
 
-# Gemini
-rag = RagRuntime(rag_path="demo.rag", provider="gemini", model="gemini-1.5-flash", ...)
+    provider="openai",
 
-# Anthropic
-rag = RagRuntime(rag_path="demo.rag", provider="anthropic", model="claude-3-haiku-20240307", ...)
+    api_key=os.getenv("OPENAI_API_KEY"),
+
+    model="gpt-4o-mini",
+
+    embedding_api_key=os.getenv("COHERE_API_KEY")
+)
 ```
 
 ---
 
-## ⚙️ Dynamic Configuration
+## 🧠 Modular Embedding Providers
 
-Customize every stage of the retrieval pipeline with `RagConfig`:
+RagBucket supports multiple embedding systems.
+
+| Provider | Example Model            |
+| -------- | ------------------------ |
+| `local`  | `BAAI/bge-small-en-v1.5` |
+| `cohere` | `embed-english-v3.0`     |
+| `openai` | `text-embedding-3-small` |
+| `gemini` | `models/embedding-001`   |
+| `voyage` | `voyage-large-2`         |
+
+Example:
+
+```python
+config = RagConfig(
+
+    embedding_provider="openai",
+
+    embedding_model="text-embedding-3-small",
+
+    embedding_api_key=os.getenv("OPENAI_API_KEY")
+)
+```
+
+---
+
+## ⚙️ Dynamic Retrieval Configuration
+
+Customize every stage of the retrieval pipeline:
 
 ```python
 from ragbucket import RagConfig
 
+
 config = RagConfig(
+
+    # Embedding system
+    embedding_provider="local",
+
     embedding_model="sentence-transformers/all-MiniLM-L6-v2",
+
+    # Chunking
     chunk_size=1024,
+
     chunk_overlap=100,
+
+    # Retrieval
     top_k=5
 )
 ```
 
-Missing values are automatically filled with sensible defaults.
-
-### Supported Embedding Models
-
-Any [Sentence Transformers](https://www.sbert.net/docs/pretrained_models.html) compatible model works:
-
-```python
-"BAAI/bge-small-en-v1.5"           # Fast, great for English
-"BAAI/bge-base-en-v1.5"            # Balanced quality/speed
-"sentence-transformers/all-MiniLM-L6-v2"   # Lightweight default
-"sentence-transformers/all-mpnet-base-v2"  # Higher accuracy
-```
+All missing values are automatically filled using framework defaults.
 
 ---
 
-## 📦 What's Inside a `.rag` File
+## 🪶 Lightweight by Default
 
-A `.rag` is a compressed ZIP archive containing exactly three files:
+RagBucket no longer forces heavyweight local AI dependencies.
 
+The core package remains lightweight.
+
+Local embedding dependencies are only required when using:
+
+```python
+embedding_provider="local"
 ```
+
+This enables:
+
+- lightweight installations
+- faster deployments
+- cloud/serverless compatibility
+- provider-based embedding pipelines
+
+---
+
+## 📦 What a `.rag` Artifact Contains
+
+```text
 demo.rag
-├── vectors.faiss     ← FAISS vector index (searchable semantic memory)
-├── chunks.json       ← Chunked document text
-└── manifest.json     ← Config, versioning, and runtime metadata
+│
+├── vectors.faiss
+├── chunks.json
+├── manifest.json
 ```
 
-At inference time, the **only external dependency** is an LLM provider API key.
+The artifact stores:
+
+- semantic vectors
+- retrieval memory
+- embedding configuration
+- retrieval settings
+- runtime metadata
+
+making the retrieval system:
+
+- portable
+- reusable
+- executable
+- shareable
+````
 
 ---
 

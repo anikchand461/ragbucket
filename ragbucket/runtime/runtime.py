@@ -4,7 +4,7 @@ from ragbucket.runtime.providers.factory import get_provider
 
 class RagRuntime:
 
-    def __init__(self, rag_path, provider, api_key, model, system_prompt=None):
+    def __init__(self, rag_path, provider, api_key, model, embedding_api_key=None, system_prompt=None):
 
         loader = RagLoader()
         loaded = loader.load(rag_path)
@@ -13,6 +13,9 @@ class RagRuntime:
         self.chunks = loaded["chunks"]
         self.manifest = loaded["manifest"]
         self.config = self.manifest["config"]
+
+        if embedding_api_key is not None:
+            self.config["embedding_api_key"] = embedding_api_key
 
         self.retriever = Retriever(config=self.config)
         self.generator = get_provider(

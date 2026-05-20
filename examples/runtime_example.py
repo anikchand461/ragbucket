@@ -14,6 +14,7 @@ rag = RagRuntime(
     provider= "groq",
     api_key = os.getenv("GROQ_API_KEY"),
     model = "llama-3.1-8b-instant",
+    # embedding_api_key=os.getenv("COHERE_API_KEY"),
     system_prompt=system_prompt
 )
 

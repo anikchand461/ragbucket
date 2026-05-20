@@ -1,6 +1,6 @@
 [project]
 name = "ragbucket"
-version = "0.2.1"
+version = "0.2.2"
 description = "Portable executable RAG artifacts for Python"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -29,15 +29,12 @@ classifiers = [
 ]
 
 dependencies = [
-    "sentence-transformers",
     "faiss-cpu",
-    "langchain",
     "numpy",
     "pydantic",
     "langchain-text-splitters>=1.1.2",
     "groq>=1.2.0",
     "python-dotenv>=1.2.2",
-    "openai>=2.37.0",
 ]
 
 [build-system]
