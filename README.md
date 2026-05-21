@@ -22,15 +22,6 @@
 
 <br/>
 
-```
-╔══════════════════════════════════════════════════════════════╗
-║   RAG systems were never meant to be locked to infrastructure ║
-║   RagBucket sets them free.                                   ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
-<br/>
-
 <p>
   <a href="#-the-problem">Problem</a> ·
   <a href="#-introducing-rag">The .rag Format</a> ·
