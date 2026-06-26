@@ -156,17 +156,6 @@ artifacts/
 └── demo.rag          ← your entire RAG pipeline, packaged
 ```
 
-Containing:
-
-```
-demo.rag
-├── vectors.faiss     ← semantic vector index
-├── chunks.json       ← chunked document memory
-└── manifest.json     ← embedding config + metadata
-```
-
-**Build once. Query anywhere.**
-
 ---
 
 ### Step 2 — Load and Query the Artifact
