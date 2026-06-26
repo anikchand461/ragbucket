@@ -19,6 +19,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-A8FF78?style=for-the-badge&labelColor=0d0d1a)](LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/ragbucket?style=for-the-badge&color=FF6B9D&labelColor=0d0d1a)](https://pypi.org/project/ragbucket/)
 [![Website](https://img.shields.io/badge/Website-ragbucket.vercel.app-c084fc?style=for-the-badge&labelColor=0d0d1a&logo=vercel&logoColor=c084fc)](https://ragbucket.vercel.app)
+[![Blog](https://img.shields.io/badge/BLOG-HASHNODE-2962FF?style=for-the-badge&logo=hashnode&logoColor=white)](https://anikchand.hashnode.dev/why-rag-pipelines-aren-t-portable-building-ragbucket)
 
 <br/>
 
